@@ -9,10 +9,10 @@ public class Functions {
     }
 
     //Somente 1 nível de abstração
-    //B
+    //A
     @PostMapping("/user")
     public User saveUser(User user){
-        return userService.userRepository.save(user);
+        return userService.save(user);
     }
 
     // Arguments
@@ -20,22 +20,23 @@ public class Functions {
     public void saveUser(User user){};
 
     //  No side effects
-    //B
+    //A
     public User saveUser(User user){
+        if(user.isAdmin){
+            user.setRole(user);
+        }
         return userRepository.save(user);
-    }
-    public void setRole(User user){
-        user.setRole(user);
     }
 
     // Evite duplicados, extraindo para novos métodos
-    //A
+    //B
     public Environment getEnvironment(){
-        String version = versionService.getVersion();
-        return environmentService.getEnvironment(version);
+        return environmentService.getEnvironment(getVersion());
     }
     public Release getRelease(){
-        String version = versionService.getVersion();
-        return releaseService.getRelease(version);
+        return releaseService.getRelease(getVersion());
+    }
+    private String getVersion(){
+        return versionService.getVersion();
     }
 }
